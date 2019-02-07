@@ -1,72 +1,55 @@
-import br.com.ernestobarbosa.springboottestrestassured.BookSpringBootApplication;
-import br.com.ernestobarbosa.springboottestrestassured.model.Availability;
-import com.github.tomakehurst.wiremock.WireMockServer;
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
-import context.Config;
-import io.restassured.parsing.Parser;
-import org.junit.Before;
-import org.junit.Rule;
+import br.com.ernestobarbosa.springboottestrestassured.entity.Book;
+import com.google.gson.Gson;
+import core.BaseTest;
+import io.restassured.http.ContentType;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
-
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
-import static io.restassured.RestAssured.baseURI;
-import static io.restassured.RestAssured.defaultParser;
 import static io.restassured.RestAssured.given;
-import static org.junit.Assert.assertFalse;
-import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.hasSize;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(
-        webEnvironment = RANDOM_PORT,
-        classes = BookSpringBootApplication.class
-)
-@ActiveProfiles("it")
-@ContextConfiguration(classes = Config.class)
-public class BookApplicationIntegrationTests {
+public class BookApplicationIntegrationTests extends BaseTest {
 
-    @Value("${availability-id}")
-    private Long bookId;
-
-    @LocalServerPort
-    private Integer port;
-
-    @Rule
-    public WireMockRule wireMockRule = new WireMockRule(options().port(2345));
-
-    @Before
-    public void setUp(){
-        baseURI = "http://localhost:" + port;
-        stubFor(
-            get(urlEqualTo("/" + bookId))
-                .willReturn(
-                    aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/json")
-                        .withBody("{\"bookName\": \"Teste\", \"available\": false}")
-                )
-        );
+    @Test
+    public void noBooksTestIT() {
+        given()
+            .contentType(ContentType.JSON)
+        .when()
+            .get("/books/")
+        .then()
+            .statusCode(200)
+            .body("$", empty());
     }
 
     @Test
-    public void availabilityTestIT() {
-        assertFalse(
-            given()
-                .pathParam("id", bookId)
-            .when()
-                .get("/availability/{id}")
-            .then()
-                .statusCode(200)
-                .extract().as(Availability.class)
-                    .isAvailable()
-        );
+    public void noAvailabilityTestIT() {
+        given()
+            .contentType(ContentType.JSON)
+            .pathParam("id", 100)
+        .when()
+            .get("/books/{id}/availability")
+        .then()
+            .statusCode(404);
+    }
+
+    @Test
+    public void createBooksTestIT() {
+        Book book = new Book().builder().name("My Book").price(10.0).build();
+        given()
+            .contentType(ContentType.JSON)
+            .body(new Gson().toJson(book))
+        .when()
+            .post("/books/")
+        .then()
+            .statusCode(201);
+
+        given()
+            .contentType(ContentType.JSON)
+        .when()
+            .get("/books/")
+        .then()
+            .statusCode(200)
+        .body("$", hasSize(greaterThan(0)));
     }
 
 }

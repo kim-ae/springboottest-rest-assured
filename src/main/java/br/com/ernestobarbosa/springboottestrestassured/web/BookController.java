@@ -2,56 +2,89 @@ package br.com.ernestobarbosa.springboottestrestassured.web;
 
 import br.com.ernestobarbosa.springboottestrestassured.entity.Book;
 import br.com.ernestobarbosa.springboottestrestassured.model.Availability;
-import br.com.ernestobarbosa.springboottestrestassured.repository.BookRepository;
+import br.com.ernestobarbosa.springboottestrestassured.model.ClientError;
 import br.com.ernestobarbosa.springboottestrestassured.service.AvailabilityService;
+import br.com.ernestobarbosa.springboottestrestassured.service.BookService;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
+@RequestMapping("/books")
 public class BookController {
 
     @Autowired
-    BookRepository repository;
+    private BookService bookService;
 
     @Autowired
-    AvailabilityService availabilityService;
+    private AvailabilityService availabilityService;
 
     @GetMapping("/")
+    @ResponseStatus(HttpStatus.OK)
     public List<Book> listBooks(){
-        return repository.findAll();
-    }
-
-    @DeleteMapping("/{id}")
-    public Book getOneBook(@PathVariable(value = "id") Long bookId){
-        return repository.getOne(bookId);
-    }
-
-    @PutMapping("/")
-    public Book newBook(@Valid @RequestBody Book book){
-        return repository.save(book);
-    }
-
-    @PostMapping("/{id}")
-    public Book updateBook(@PathVariable(value = "id") Long bookId, @Valid @RequestBody Book book){
-        Book b = repository.findById(bookId).get();
-        b.setName(book.getName());
-        b.setPrice(book.getPrice());
-        return repository.save(book);
+        return bookService.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> deleteOne(@PathVariable(value = "id") Long bookId){
-        repository.deleteById(bookId);
-        return ResponseEntity.ok().build();
+    @ResponseStatus(HttpStatus.OK)
+    public Book getOneBook(@PathVariable(value = "id") Long bookId){
+        return bookService.getOne(bookId);
     }
 
-    @GetMapping("/availability/{id}")
+    @PostMapping("/")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void newBook(@Valid @RequestBody Book book){
+        bookService.save(book);
+    }
+
+    @PutMapping("/")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateBook(@Valid @RequestBody Book book){
+        bookService.update(book);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteOne(@PathVariable(value = "id") Long bookId){
+        bookService.delete(bookId);
+    }
+
+    @PutMapping("/availability")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void bookAvailability(@Valid @RequestBody Availability availability){
+        availabilityService.updateAvailability(availability);
+    }
+
+    @GetMapping("/{id}/availability")
+    @ResponseStatus(HttpStatus.OK)
     public Availability bookAvailability(@PathVariable(value = "id") Long bookId){
         return availabilityService.getAvailabilityById(bookId);
     }
 
+    @PutMapping("/{id}/loan")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void loanBook(@PathVariable(value = "id") Long bookId){
+        availabilityService.removeStock(bookId);
+    }
+
+    @PutMapping("/{id}/devolution")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void devolutionBook(@PathVariable(value = "id") Long bookId){
+        availabilityService.addStock(bookId);
+    }
+
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ClientError handleConstraintError(){
+        return new ClientError("Duplicated Resource");
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public void handleNotFoundError(){}
 }

@@ -1,5 +1,7 @@
 package br.com.ernestobarbosa.springboottestrestassured.model;
 
+import br.com.ernestobarbosa.springboottestrestassured.entity.Book;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 @Getter
@@ -8,6 +10,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class Availability {
-    private String bookName;
-    private boolean available;
+    private Long bookId;
+    private Integer stock;
 }
