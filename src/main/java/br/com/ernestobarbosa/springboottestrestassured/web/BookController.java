@@ -15,7 +15,7 @@ import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/books")
-public class BookController {
+public class BookController implements BookControllerApi{
 
     @Autowired
     private BookService bookService;
