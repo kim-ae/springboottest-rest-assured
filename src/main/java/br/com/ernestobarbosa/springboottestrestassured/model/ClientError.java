@@ -11,4 +11,6 @@ import lombok.Setter;
 @Getter
 public class ClientError {
     private String message;
+//    private int code;
 }
+// {'message': 'minha mensagem', 'code':200}

@@ -13,6 +13,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+//localhost:porta/books
 @RestController
 @RequestMapping("/books")
 public class BookController implements BookControllerApi{
@@ -23,18 +24,21 @@ public class BookController implements BookControllerApi{
     @Autowired
     private AvailabilityService availabilityService;
 
+    // GET localhost:porta/books/
     @GetMapping("/")
     @ResponseStatus(HttpStatus.OK)
     public List<Book> listBooks(){
         return bookService.findAll();
     }
 
+    //localhost:porta/books/2
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Book getOneBook(@PathVariable(value = "id") Long bookId){
         return bookService.getOne(bookId);
     }
 
+    //localhost:porta/books/
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
     public void newBook(@Valid @RequestBody Book book){

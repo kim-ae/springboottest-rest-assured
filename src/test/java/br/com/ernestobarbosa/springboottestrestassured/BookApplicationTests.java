@@ -1,7 +1,6 @@
 package br.com.ernestobarbosa.springboottestrestassured;
 
 import br.com.ernestobarbosa.springboottestrestassured.entity.Book;
-import br.com.ernestobarbosa.springboottestrestassured.functions.*;
 import br.com.ernestobarbosa.springboottestrestassured.service.AvailabilityService;
 import br.com.ernestobarbosa.springboottestrestassured.service.BookService;
 import org.junit.Test;
@@ -86,21 +85,6 @@ public class BookApplicationTests {
     public void getAvailabilityTest() throws Exception {
         assertTrue(rest.getForEntity(host + ":" + port + "/books/" + book.getBookId() + "/availability", List.class).getStatusCode() == HttpStatus.OK);
         verify(availabilityService, times(1)).getAvailabilityById(book.getBookId());
-    }
-
-    @Test
-    public void simpleTaxTest(){
-        assertTrue(Tax.getSimpleTax(1.0).equals(0.03));
-    }
-
-    @Test
-    public void federationTaxTest(){
-        assertTrue(getFederationTax(5.32).equals(0.6916));
-    }
-
-    @Test
-    public void priceAllTaxTest(){
-        assertTrue(getPriceAllTax(16.73).equals(21.2471));
     }
 
 }

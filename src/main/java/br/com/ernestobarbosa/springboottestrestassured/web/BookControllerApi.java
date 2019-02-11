@@ -31,7 +31,7 @@ public interface BookControllerApi {
     @ApiOperation(value = "Create book.",
             notes = "Operação para criar um livro")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Livro criado."),
+            @ApiResponse(code = 201, message = "Livro criado."),
             @ApiResponse(code = 400, message = "Parâmetro(s) inválido(s)."),
             @ApiResponse(code = 409, message = "Livro já cadastrado.")
     })

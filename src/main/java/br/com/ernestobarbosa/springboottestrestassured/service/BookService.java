@@ -40,7 +40,7 @@ public class BookService {
 
     @Transactional
     public void delete(Long id){
-        availabilityService.deleteAvailability(id);
         repository.deleteById(id);
+        availabilityService.deleteAvailability(id);
     }
 }
