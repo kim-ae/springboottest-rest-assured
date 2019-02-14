@@ -1,7 +1,8 @@
 package br.com.ernestobarbosa.springboottestrestassured.repository;
 
-import br.com.ernestobarbosa.springboottestrestassured.entity.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import br.com.ernestobarbosa.springboottestrestassured.entity.Book;
 
 public interface BookRepository extends JpaRepository<Book, Long> {
 }

@@ -1,12 +1,15 @@
-import br.com.ernestobarbosa.springboottestrestassured.entity.Book;
-import com.google.gson.Gson;
-import core.BaseTest;
-import io.restassured.http.ContentType;
-import org.junit.Test;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
+
+import org.junit.Test;
+
+import com.google.gson.Gson;
+
+import br.com.ernestobarbosa.springboottestrestassured.entity.Book;
+import core.BaseTest;
+import io.restassured.http.ContentType;
 
 public class BookApplicationIntegrationTests extends BaseTest {
 

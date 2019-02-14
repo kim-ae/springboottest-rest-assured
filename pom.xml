@@ -31,11 +31,13 @@
         <rest-assured.version>3.1.0</rest-assured.version>
         <rest-assured.jsonpath.version>3.1.0</rest-assured.jsonpath.version>
         <surefire.version>2.21.0</surefire.version>
+        <extentreports.version>4.0.9</extentreports.version>
 
         <!-- test flags -->
         <skipITs>true</skipITs>
         <skipTests>false</skipTests>
         <skipUTs>${skipTests}</skipUTs>
+        <surefire.groups></surefire.groups>
     </properties>
 
     <dependencies>
@@ -104,9 +106,14 @@
             <version>${allure.version}</version>
             <scope>test</scope>
         </dependency>
-
-
-
+        
+		<dependency>
+		    <groupId>com.aventstack</groupId>
+		    <artifactId>extentreports</artifactId>
+		    <version>${extentreports.version}</version>
+		    <scope>test</scope>
+		</dependency>
+       
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -177,6 +184,7 @@
                     <systemProperties>
                         <allure.results.directory>${project.basedir}/target/allure-results</allure.results.directory>
                     </systemProperties>
+                    <groups>${surefire.groups}</groups>
                 </configuration>
             </plugin>
 
@@ -221,7 +229,52 @@
                     </execution>
                 </executions>
             </plugin>
+            
+            <!-- add resources it folder -->
+            <plugin>
+                <inherited>true</inherited>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.7</version>
+				<executions>
+			        <execution>
+			            <id>copy-allure-environment</id>
+			            <phase>pre-site</phase>
+			            <goals>
+			                <goal>copy-resources</goal>
+			            </goals>
+			            <configuration>
+			                <outputDirectory>${basedir}/target/allure-results</outputDirectory>
+			                <resources>
+			                    <resource>
+			                        <directory>src/it/resources</directory>
+			                        <includes>
+			                            <include>allure.properties</include>
+			                            <include>categories.json</include>
+			                            <include>environment.properties</include>
+			                        </includes>
+			                    </resource>
+			                </resources>
+			            </configuration>
+			        </execution>
+			    </executions>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>   
         </plugins>
     </build>
-
+    
+    <!-- profiles execucao -->
+    <profiles>
+	    <profile>
+            <id>it-test</id>
+            <properties>
+                <skipTests>false</skipTests>
+                <skipITs>false</skipITs>
+                <skipUTs>true</skipUTs>
+                <surefire.groups>category.ReportsTests</surefire.groups>
+            </properties>
+        </profile>
+	</profiles>
 </project>

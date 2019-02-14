@@ -1,11 +1,12 @@
 package br.com.ernestobarbosa.springboottestrestassured.service;
 
-import br.com.ernestobarbosa.springboottestrestassured.entity.Book;
-import br.com.ernestobarbosa.springboottestrestassured.model.Availability;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import br.com.ernestobarbosa.springboottestrestassured.entity.Book;
+import br.com.ernestobarbosa.springboottestrestassured.model.Availability;
 
 @Service
 public class AvailabilityService {
