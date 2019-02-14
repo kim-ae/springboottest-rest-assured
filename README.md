@@ -9,5 +9,5 @@ Testes em aplicações Spring utilizando SpringBootTest e Rest Assured
 ### Executando os Testes de Integracao:
 
 ```sh
-$ mvn clean pre-site verify -Pit-full
+$ mvn clean pre-site verify -Pit-test
 ```
