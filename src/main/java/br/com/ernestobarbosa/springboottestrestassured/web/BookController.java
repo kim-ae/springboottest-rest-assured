@@ -8,7 +8,10 @@ import br.com.ernestobarbosa.springboottestrestassured.service.BookService;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
+
 import javax.validation.Valid;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -25,7 +28,7 @@ public class BookController implements BookControllerApi{
     private AvailabilityService availabilityService;
 
     // GET localhost:porta/books/
-    @GetMapping("/")
+    @GetMapping({"","/"})
     @ResponseStatus(HttpStatus.OK)
     public List<Book> listBooks(){
         return bookService.findAll();
@@ -39,13 +42,13 @@ public class BookController implements BookControllerApi{
     }
 
     //localhost:porta/books/
-    @PostMapping("/")
+    @PostMapping({"","/"})
     @ResponseStatus(HttpStatus.CREATED)
-    public void newBook(@Valid @RequestBody Book book){
-        bookService.save(book);
+    public Book newBook(@Valid @RequestBody Book book){
+        return bookService.save(book);
     }
 
-    @PutMapping("/")
+    @PutMapping({"","/"})
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateBook(@Valid @RequestBody Book book){
         bookService.update(book);
@@ -83,12 +86,16 @@ public class BookController implements BookControllerApi{
 
 
     @ExceptionHandler(ConstraintViolationException.class)
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ClientError handleConstraintError(){
-        return new ClientError("Duplicated Resource");
+    public ResponseEntity<ClientError> handleConstraintError(){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ClientError("Duplicated Resource"));
     }
 
     @ExceptionHandler(NoSuchElementException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public void handleNotFoundError(){}
+
+    @ExceptionHandler(HttpClientErrorException.class)
+    public ResponseEntity<ClientError> handleExternalService(HttpClientErrorException e){
+        return ResponseEntity.status(e.getStatusCode()).body(new ClientError(e.getMessage()));
+    }
 }

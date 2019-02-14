@@ -1,14 +1,17 @@
 package br.com.ernestobarbosa.springboottestrestassured.service;
 
-import br.com.ernestobarbosa.springboottestrestassured.entity.Book;
-import br.com.ernestobarbosa.springboottestrestassured.repository.BookRepository;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import br.com.ernestobarbosa.springboottestrestassured.entity.Book;
+import br.com.ernestobarbosa.springboottestrestassured.repository.BookRepository;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class BookService {
 
     @Autowired
@@ -26,12 +29,16 @@ public class BookService {
     }
 
     @Transactional
-    public void save(Book book){
-        repository.save(book);
+    public Book save(Book book){
+        log.info("Trying to create book: {}", book);
+        final Book newBook = repository.save(book);
         availabilityService.setAvailability(book);
+        return newBook;
+
     }
 
     public void update(Book book){
+        log.info("Trying to update book: {}", book);
         Book b = repository.findById(book.getBookId()).get();
         b.setName(book.getName());
         b.setPrice(book.getPrice());
@@ -40,6 +47,7 @@ public class BookService {
 
     @Transactional
     public void delete(Long id){
+        log.info("Trying to delete book: {}", id);
         repository.deleteById(id);
         availabilityService.deleteAvailability(id);
     }

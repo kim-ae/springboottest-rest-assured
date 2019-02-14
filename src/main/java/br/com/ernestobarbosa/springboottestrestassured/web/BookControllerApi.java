@@ -1,13 +1,13 @@
 package br.com.ernestobarbosa.springboottestrestassured.web;
 
+import java.util.List;
+
 import br.com.ernestobarbosa.springboottestrestassured.entity.Book;
 import br.com.ernestobarbosa.springboottestrestassured.model.Availability;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-
-import java.util.List;
 
 public interface BookControllerApi {
 
@@ -35,7 +35,7 @@ public interface BookControllerApi {
             @ApiResponse(code = 400, message = "Parâmetro(s) inválido(s)."),
             @ApiResponse(code = 409, message = "Livro já cadastrado.")
     })
-    void newBook(@ApiParam(value = "Book with name and price.", required = true) Book book);
+    Book newBook(@ApiParam(value = "Book with name and price.", required = true) Book book);
 
     @ApiOperation(value = "Update specific book.",
             notes = "Operação para editar os dados de um livro")
@@ -78,6 +78,7 @@ public interface BookControllerApi {
     @ApiResponses({
             @ApiResponse(code = 204, message = "Operação realizada com sucesso."),
             @ApiResponse(code = 400, message = "Parâmetro(s) inválido(s)."),
+            @ApiResponse(code = 401, message = "Livro sem estoque."),
             @ApiResponse(code = 404, message = "Livro não encontrado.")
     })
     void loanBook(@ApiParam(value = "Book ID for loan.", required = true) Long bookId);
