@@ -12,6 +12,7 @@ import javax.persistence.*;
 @Setter
 @Getter
 @Builder
+@ToString
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(name = "book")
 public class Book {
