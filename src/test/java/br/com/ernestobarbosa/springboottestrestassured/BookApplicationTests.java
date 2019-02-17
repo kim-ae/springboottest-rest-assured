@@ -1,8 +1,14 @@
 package br.com.ernestobarbosa.springboottestrestassured;
 
-import br.com.ernestobarbosa.springboottestrestassured.entity.Book;
-import br.com.ernestobarbosa.springboottestrestassured.service.AvailabilityService;
-import br.com.ernestobarbosa.springboottestrestassured.service.BookService;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -17,16 +23,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
-
-import static br.com.ernestobarbosa.springboottestrestassured.functions.Tax.getFederationTax;
-import static br.com.ernestobarbosa.springboottestrestassured.functions.Tax.getPriceAllTax;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import br.com.ernestobarbosa.springboottestrestassured.entity.Book;
+import br.com.ernestobarbosa.springboottestrestassured.service.AvailabilityService;
+import br.com.ernestobarbosa.springboottestrestassured.service.BookService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(

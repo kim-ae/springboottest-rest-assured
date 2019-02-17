@@ -1,11 +1,12 @@
 package br.com.ernestobarbosa.springboottestrestassured;
 
-import br.com.ernestobarbosa.springboottestrestassured.functions.Tax;
-import org.junit.Test;
-
 import static br.com.ernestobarbosa.springboottestrestassured.functions.Tax.getFederationTax;
 import static br.com.ernestobarbosa.springboottestrestassured.functions.Tax.getPriceAllTax;
 import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
+
+import br.com.ernestobarbosa.springboottestrestassured.functions.Tax;
 
 public class SimpleTests {
 

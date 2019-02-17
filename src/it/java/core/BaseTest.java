@@ -1,11 +1,10 @@
 package core;
 
-import br.com.ernestobarbosa.springboottestrestassured.BookSpringBootApplication;
-import br.com.ernestobarbosa.springboottestrestassured.model.Availability;
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
-import com.google.gson.Gson;
-import context.Config;
-import io.restassured.parsing.Parser;
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
+import static io.restassured.RestAssured.baseURI;
+import static io.restassured.RestAssured.defaultParser;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.runner.RunWith;
@@ -15,11 +14,11 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
-import static io.restassured.RestAssured.baseURI;
-import static io.restassured.RestAssured.defaultParser;
-import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
+import com.github.tomakehurst.wiremock.junit.WireMockRule;
+
+import br.com.ernestobarbosa.springboottestrestassured.BookSpringBootApplication;
+import context.Config;
+import io.restassured.parsing.Parser;
 
 @ActiveProfiles("it")
 @RunWith(SpringRunner.class)
@@ -32,7 +31,7 @@ public class BaseTest {
 
     @Rule
     public WireMockRule wireMockRule = new WireMockRule(options().port(2345));
-
+        
     @Before
     public void setUp(){
         defaultParser = Parser.JSON;

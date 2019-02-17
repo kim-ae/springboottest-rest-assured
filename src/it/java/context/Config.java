@@ -1,10 +1,11 @@
 package context;
 
-import br.com.ernestobarbosa.springboottestrestassured.service.AvailabilityService;
-import br.com.ernestobarbosa.springboottestrestassured.service.BookService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
+
+import br.com.ernestobarbosa.springboottestrestassured.service.AvailabilityService;
+import br.com.ernestobarbosa.springboottestrestassured.service.BookService;
 
 @Configuration
 public class Config {
