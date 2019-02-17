@@ -1,8 +1,10 @@
 server-url: http://localhost
 availability-url: https://stock-demo-service.herokuapp.com/
+
 logging:
   level:
-    root: DEBUG
+    root: INFO
+
 spring:
   h2:
     console:

@@ -25,7 +25,7 @@ public class BookService {
     }
 
     public Book getOne(Long bookId){
-        return repository.findById(bookId).get();
+        return repository.findOne(bookId);
     }
 
     @Transactional
@@ -39,7 +39,7 @@ public class BookService {
 
     public void update(Book book){
         log.info("Trying to update book: {}", book);
-        Book b = repository.findById(book.getBookId()).get();
+        Book b = repository.findOne(book.getBookId());
         b.setName(book.getName());
         b.setPrice(book.getPrice());
         repository.save(b);
@@ -48,7 +48,7 @@ public class BookService {
     @Transactional
     public void delete(Long id){
         log.info("Trying to delete book: {}", id);
-        repository.deleteById(id);
+        repository.delete(id);
         availabilityService.deleteAvailability(id);
     }
 }

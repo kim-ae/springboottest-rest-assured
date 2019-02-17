@@ -5,11 +5,11 @@
 	<include resource="org/springframework/boot/logging/logback/console-appender.xml" />
 
 	<shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook" />
-	<logger name="org.hibernate.SQL" level="TRACE" additivity="false">
+	<logger name="org.hibernate.SQL" level="INFO" additivity="false">
 		<appender-ref ref="CONSOLE" />
 	</logger>
 
-	<logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE" additivity="false">
+	<logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="INFO" additivity="false">
 		<appender-ref ref="CONSOLE" />
 	</logger>
 
@@ -17,7 +17,7 @@
 		<appender-ref ref="CONSOLE" />
 	</logger>
 
-	<logger name="br.com.lojasrenner" level="DEBUG" additivity="false">
+	<logger name="br.com.lojasrenner" level="INFO" additivity="false">
 		<appender-ref ref="CONSOLE" />
 	</logger>
 

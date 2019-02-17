@@ -1,57 +1,35 @@
 package br.com.ernestobarbosa.springboottestrestassured;
 
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.MOCK;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
-import java.util.List;
-
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpStatus;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.WebApplicationContext;
 
 import br.com.ernestobarbosa.springboottestrestassured.entity.Book;
 import br.com.ernestobarbosa.springboottestrestassured.service.AvailabilityService;
 import br.com.ernestobarbosa.springboottestrestassured.service.BookService;
 
-@RunWith(SpringRunner.class)
+@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(
-    webEnvironment = RANDOM_PORT,
-    classes = BookSpringBootApplication.class
+    webEnvironment = MOCK
 )
 @AutoConfigureMockMvc
 public class BookApplicationTests {
 
-    @Value("${server-url}")
-    private String host;
-
-    @LocalServerPort
-    private int port;
-
-    @Autowired
-    private BookService bookService;
-
-    @Autowired
-    private AvailabilityService availabilityService;
-
-    @Autowired
-    private RestTemplate rest;
-
-    @Autowired
-    private MockMvc mvc;
+    private MockMvc mockMvc;
 
     @MockBean
     private BookService mockBookService;
@@ -59,31 +37,34 @@ public class BookApplicationTests {
     @MockBean
     private AvailabilityService mockAvailabilityService;
 
-    @Mock
-    Book book;
+    @Autowired
+    private WebApplicationContext context;
+
+    @Before
+    public void setup() {
+        mockMvc = webAppContextSetup(context)
+            .build();
+    }
 
     @Test
     public void getBooksMockedTest() throws Exception {
-        mvc.perform(get(host + ":" + port + "/books/")).andExpect(status().isOk());
+        mockMvc.perform(get("/books/")).andExpect(status().isOk());
         verify(mockBookService, times(1)).findAll();
     }
 
     @Test
-    public void getBooksTest() throws Exception {
-        assertTrue(rest.getForEntity(host + ":" + port + "/books/", List.class).getStatusCode() == HttpStatus.OK);
-        verify(bookService, times(1)).findAll();
-    }
-
-    @Test
     public void getAvailabilityMockedTest() throws Exception {
-        mvc.perform(get(host + ":" + port + "/books/" + book.getBookId() + "/availability")).andExpect(status().isOk());
+        final Book book = Book.builder().bookId(1l).build();
+        mockMvc.perform(get("/books/" + book.getBookId() + "/availability")).andExpect(status().isOk());
         verify(mockAvailabilityService, times(1)).getAvailabilityById(book.getBookId());
     }
 
     @Test
     public void getAvailabilityTest() throws Exception {
-        assertTrue(rest.getForEntity(host + ":" + port + "/books/" + book.getBookId() + "/availability", List.class).getStatusCode() == HttpStatus.OK);
-        verify(availabilityService, times(1)).getAvailabilityById(book.getBookId());
+        final Book book = Book.builder().bookId(1l).build();
+        mockMvc.perform(get("/books/" + book.getBookId() + "/availability")).andExpect(
+            status().isOk());
+        verify(mockAvailabilityService, times(1)).getAvailabilityById(book.getBookId());
     }
 
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>br.com.ernestobarbosa</groupId>
@@ -14,7 +14,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.0.RELEASE</version>
+        <version>1.5.11.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -106,14 +106,7 @@
             <version>${allure.version}</version>
             <scope>test</scope>
         </dependency>
-        
-		<dependency>
-		    <groupId>com.aventstack</groupId>
-		    <artifactId>extentreports</artifactId>
-		    <version>${extentreports.version}</version>
-		    <scope>test</scope>
-		</dependency>
-       
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -127,7 +120,28 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>cobertura-maven-plugin</artifactId>
+                <configuration>
+                    <check/>
+                    <formats>
+                        <format>html</format>
+                        <format>xml</format>
+                    </formats>
+                    <instrumentation>
+                        <ignoreTrivial>false</ignoreTrivial>
+                    </instrumentation>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>cobertura</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 
             <!-- unit tests -->
             <plugin>
@@ -136,7 +150,6 @@
                 <version>${surefire.version}</version>
                 <configuration>
                     <skipTests>${skipUTs}</skipTests>
-                    <testFailureIgnore>false</testFailureIgnore>
                     <argLine>
                         -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
                     </argLine>
@@ -168,9 +181,8 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <skipTests>${skipTests}</skipTests>
                     <skipITs>${skipITs}</skipITs>
-                    <testFailureIgnore>false</testFailureIgnore>
+                    <testFailureIgnore>true</testFailureIgnore>
                     <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
                     <argLine>
                         -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
@@ -195,7 +207,7 @@
                 <version>${allure.report.version}</version>
             </plugin>
 
-            <!-- add it folder -->
+            <!-- add it folder
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
@@ -229,45 +241,45 @@
                     </execution>
                 </executions>
             </plugin>
-            
+-->
             <!-- add resources it folder -->
             <plugin>
                 <inherited>true</inherited>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>2.7</version>
-				<executions>
-			        <execution>
-			            <id>copy-allure-environment</id>
-			            <phase>pre-site</phase>
-			            <goals>
-			                <goal>copy-resources</goal>
-			            </goals>
-			            <configuration>
-			                <outputDirectory>${basedir}/target/allure-results</outputDirectory>
-			                <resources>
-			                    <resource>
-			                        <directory>src/it/resources</directory>
-			                        <includes>
-			                            <include>allure.properties</include>
-			                            <include>categories.json</include>
-			                            <include>environment.properties</include>
-			                        </includes>
-			                    </resource>
-			                </resources>
-			            </configuration>
-			        </execution>
-			    </executions>
+                <executions>
+                    <execution>
+                        <id>copy-allure-environment</id>
+                        <phase>pre-site</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/allure-results</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/it/resources</directory>
+                                    <includes>
+                                        <include>allure.properties</include>
+                                        <include>categories.json</include>
+                                        <include>environment.properties</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
                 <configuration>
                     <encoding>UTF-8</encoding>
                 </configuration>
-            </plugin>   
+            </plugin>
         </plugins>
     </build>
-    
+
     <!-- profiles execucao -->
     <profiles>
-	    <profile>
+        <profile>
             <id>it-test</id>
             <properties>
                 <skipTests>false</skipTests>
@@ -276,5 +288,5 @@
                 <surefire.groups>category.ReportsTests</surefire.groups>
             </properties>
         </profile>
-	</profiles>
+    </profiles>
 </project>

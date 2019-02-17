@@ -8,10 +8,10 @@ import org.junit.Test;
 import com.google.gson.Gson;
 
 import br.com.ernestobarbosa.springboottestrestassured.entity.Book;
-import core.BaseTest;
+import core.AbstractIT;
 import io.restassured.http.ContentType;
 
-public class BookApplicationIntegrationTests extends BaseTest {
+public class BookApplicationIntegrationIT extends AbstractIT {
 
     @Test
     public void noBooksTestIT() {

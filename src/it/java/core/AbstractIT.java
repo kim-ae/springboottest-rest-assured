@@ -9,7 +9,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -24,9 +23,8 @@ import io.restassured.parsing.Parser;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = RANDOM_PORT, classes = BookSpringBootApplication.class)
 @ContextConfiguration(classes = Config.class)
-public class BaseTest {
+public class AbstractIT {
 
-    @LocalServerPort
     private Integer port;
 
     @Rule

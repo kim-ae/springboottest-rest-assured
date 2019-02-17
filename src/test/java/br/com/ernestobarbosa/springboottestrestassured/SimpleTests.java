@@ -9,6 +9,7 @@ import org.junit.Test;
 import br.com.ernestobarbosa.springboottestrestassured.functions.Tax;
 
 public class SimpleTests {
+    private final static Double FEDERATION_TAX = 0.13;
 
     @Test
     public void simpleTaxTest(){
@@ -17,7 +18,7 @@ public class SimpleTests {
 
     @Test
     public void federationTaxTest(){
-        assertTrue(getFederationTax(5.32).equals(0.6916));
+        assertTrue(getFederationTax(5.32).equals(FEDERATION_TAX*5.32));
     }
 
     @Test
